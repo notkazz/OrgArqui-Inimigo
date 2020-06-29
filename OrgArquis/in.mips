@@ -1,0 +1,5 @@
+.text
+.globl main
+main:
+addiu $t2, $t1, 5
+addu $t3, $t2, $t7
