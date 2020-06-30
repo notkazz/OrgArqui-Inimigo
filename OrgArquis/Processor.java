@@ -77,24 +77,14 @@ public class Processor {
                     case "lw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-                        param = command[1].split(", ");
-                        reg1 = param[0];
-                        reg2 = param[1].substring(0, 1);
-                        reg3 = param[1].substring(2, param[1].length()-1);
-                        aux = (Integer.parseInt(reg2)/4);
-                        registers.put(reg1, memory[aux]);
+                        
                         updateSummary();
                         break;
 
                     case "sw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-                        param = command[1].split(", ");
-                        reg1 = param[0];
-                        reg2 = param[1].substring(0, 1);
-                        reg3 = param[1].substring(2, param[1].length()-1);
-                        aux = (Integer.parseInt(reg2)/4) + registers.get(reg3);
-                        memory[aux] = registers.get(reg1);
+
                         updateSummary();
                         break;
 
@@ -140,16 +130,32 @@ public class Processor {
                         updateSummary();
                         break;
 
-                    case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                    case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = rVal1>>rVal2;
+                        registers.put(reg1, aux);
 
                         updateSummary();
                         break;
 
-                    case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                    case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = rVal2<<rVal1;
+                        registers.put(reg1, aux);
 
                         updateSummary();
                         break;
@@ -159,9 +165,8 @@ public class Processor {
                 }
             }
         }
-        System.out.println("  -=-=-=-=  -=-=-=-=-  =-=-=-=-  ");
         System.out.println("-=-=-=-=-=-=-=-End-=-=-=-=-=-=-=-");
-        System.out.println("  -=-=-=-=  -=-=-=-=-  =-=-=-=-  ");
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     }
 
 
@@ -224,7 +229,7 @@ public class Processor {
             }
             for(int h=0; h<memory.length; h++){
                 if(memory[h]!=null){
-                    writer.write(" Mem|"+h+" => "+memory[h]+"\n");
+                    writer.write(" Mem|"+h+" => "+memory[h]);
                 }
             }
             writer.close();
