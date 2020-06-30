@@ -109,16 +109,36 @@ public class Processor {
                         break;
 
                     case "beq": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        //BEQ $s0, $s1, L2              #desvia para L2 se $s0 = $s1
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-                        
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg1);
+                        rVal2 = registers.get(reg2);
+                        if(rVal1==rVal2){
+
+                        //desvia pra reg1
+                        }
                         updateSummary();
                         break;
 
                     case "bne": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        //BEQ $s0, $s1, L2              #desvia para L2 se $s0 != $s1
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg1);
+                        rVal2 = registers.get(reg2);
+                        if(rVal1!=rVal2){
 
+                        //desvia pra reg1
+                        }
                         updateSummary();
                         break;
 
@@ -133,7 +153,7 @@ public class Processor {
                         rVal2 = registers.get(reg3);
                         aux = lessThan(rVal1,rVal2);
                         registers.put(reg1, aux);
-                        
+
                         updateSummary();
                         break;
 
