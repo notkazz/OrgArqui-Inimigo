@@ -233,7 +233,7 @@ public class Processor {
         String binS1 = intToBinS(bin1);
         String binS2 = intToBinS(bin2);
         String xor = "";
-        for(int i = 0; i < binS1.length(); i++){
+        for(int i = 0; i < binS2.length(); i++){
             char b = binS1.charAt(i);
             char b2 = binS2.charAt(i);
             if(b!=b2){
@@ -244,6 +244,25 @@ public class Processor {
             }
         }
         return xor;
+    }
+    public String intBinAnd(int bin1, int bin2){
+        String binS1 = intToBinS(bin1);
+        String binS2 = intToBinS(bin2);
+        String and = "";
+        if(binS1.length()>binS2.length()){
+
+        }
+        for(int i = 0; i < binS2.length(); i++){
+            char b = binS1.charAt(i);
+            char b2 = binS2.charAt(i);
+            if(b!=b2){
+                and = and + "1";
+            }
+            else if(b==b2){
+                and = and + "0";
+            }
+        }
+        return and;
     }
 
 
