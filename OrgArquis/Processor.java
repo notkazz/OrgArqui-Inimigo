@@ -9,6 +9,7 @@ public class Processor {
     HashMap<String, Integer> registers; // Init
     HashMap<String, Integer> labelAddress; // Init
     String[] commandMemory = new String[1000]; // MC
+    
     Integer[] memory = new Integer[1000]; // MC
     String pc; // Sim
     String commandLine; // Sim
