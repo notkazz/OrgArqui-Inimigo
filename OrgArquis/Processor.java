@@ -132,7 +132,13 @@ public class Processor {
                     case "ori": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = binToIntI(intBinOri(rVal1, rVal2));
                         updateSummary();
                         break;
 
@@ -265,6 +271,37 @@ public class Processor {
             }
         }
         return xor;
+    }
+    public String intBinOri(int bin1, int bin2){
+        String binS1 = intToBinS(bin1);
+        String binS2 = intToBinS(bin2);
+        String ori = "";
+        int tam = 0;
+        if(binS1.length() > binS2.length()){
+            int dif = binS1.length() - binS2.length();
+            for(int i = 0; i<dif;i++){
+                binS2 = "0" + binS2;
+            }
+            tam = binS1.length();
+        }
+        else if(binS2.length() > binS1.length()){
+            int dif = binS1.length() - binS2.length();
+            for(int i = 0; i<dif;i++){
+                binS1 = "0" + binS1;
+            }
+            tam = binS2.length();
+        }
+        for(int i = 0; i < tam; i++){
+            char b = binS1.charAt(i);
+            char b2 = binS2.charAt(i);
+            if(b==0 && b2 == 0){
+                ori = ori + "0";
+            }
+            else{
+                ori = ori + "1";
+            }
+        }
+        return ori;
     }
     public String intBinAnd(int bin1, int bin2){
         String binS1 = intToBinS(bin1);
