@@ -35,14 +35,17 @@ public class Processor {
                     case "xor": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                     
                         updateSummary();
                         break;
 
                     case "lui": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        registers.put(reg1, Integer.parseInt(reg2));
                         updateSummary();
                         break;
 
