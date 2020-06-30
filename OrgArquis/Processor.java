@@ -273,6 +273,37 @@ public class Processor {
         }
         
     }
+    public String intBinXor(int bin1, int bin2){
+        String binS1 = intToBinS(bin1);
+        String binS2 = intToBinS(bin2);
+        String xor = "";
+        int tam = 0;
+        if(binS1.length() > binS2.length()){
+            int dif = binS1.length() - binS2.length();
+            for(int i = 0; i<dif;i++){
+                binS2 = "0" + binS2;
+            }
+            tam = binS1.length();
+        }
+        else if(binS2.length() > binS1.length()){
+            int dif = binS1.length() - binS2.length();
+            for(int i = 0; i<dif;i++){
+                binS1 = "0" + binS1;
+            }
+            tam = binS2.length();
+        }
+        for(int i = 0; i < tam; i++){
+            char b = binS1.charAt(i);
+            char b2 = binS2.charAt(i);
+            if(b!=b2){
+                xor = xor + "1";
+            }
+            else if(b==2){
+                xor = xor + "0";
+            }
+        }
+        return xor;
+    }
     public String intBinOri(int bin1, int bin2){
         String binS1 = intToBinS(bin1);
         String binS2 = intToBinS(bin2);
