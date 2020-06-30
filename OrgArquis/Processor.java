@@ -109,7 +109,6 @@ public class Processor {
                         break;
 
                     case "beq": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-                        //BEQ $s0, $s1, L2              #desvia para L2 se $s0 = $s1
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -119,14 +118,14 @@ public class Processor {
                         rVal1 = registers.get(reg1);
                         rVal2 = registers.get(reg2);
                         if(rVal1==rVal2){
-
-                        //desvia pra reg1
+                            aux = labelAddress.get(reg3);
+                            i = aux;
                         }
                         updateSummary();
                         break;
 
                     case "bne": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-                        //BEQ $s0, $s1, L2              #desvia para L2 se $s0 != $s1
+                        //BnQ $s0, $s1, L2              #desvia para L2 se $s0 != $s1
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -137,7 +136,6 @@ public class Processor {
                         rVal2 = registers.get(reg2);
                         if(rVal1!=rVal2){
 
-                        //desvia pra reg1
                         }
                         updateSummary();
                         break;
@@ -381,7 +379,7 @@ public class Processor {
     // Summary Controll - SM
     public void updateSummary() {
         try (FileWriter writer = new FileWriter("summary.txt", true)){
-            writer.write("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+            writer.write("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
             writer.write("-=-Instruction|" + commandLine + "|\n");
             writer.write("-=-=-=-=-=-=PC|" + pc + "|\n");
             for(String reg : registers.keySet()){
