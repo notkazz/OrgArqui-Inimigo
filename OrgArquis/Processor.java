@@ -125,7 +125,15 @@ public class Processor {
                     case "slt": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = registers.get(reg3);
+                        aux = lessThan(rVal1,rVal2);
+                        registers.put(reg1, aux);
+                        
                         updateSummary();
                         break;
 
@@ -324,6 +332,14 @@ public class Processor {
             }
         }
         return and;
+    }
+    public int lessThan(int num1,int num2){
+        if(num1<num2){
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
 
 
