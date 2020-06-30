@@ -33,9 +33,16 @@ public class Processor {
                 String[] command = commandMemory[i].split(" ", 2);
                 switch (command[0]) {
                     case "xor": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-                        commandLine = commandMemory[i];    
+                        commandLine = commandMemory[i];
                         pc = commandMemory[i+1];
-                     
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = registers.get(reg3);
+                        aux = binToIntI(intBinXor(rVal1, rVal2));
+                        registers.put(reg1, aux);
                         updateSummary();
                         break;
 
@@ -221,6 +228,22 @@ public class Processor {
     public String intBinAdd(int bin1, int bin2) {
         String sum = binAdd(intToBinS(bin1), intToBinS(bin2));
         return sum;
+    }
+    public String intBinXor(int bin1, int bin2){
+        String binS1 = intToBinS(bin1);
+        String binS2 = intToBinS(bin2);
+        String xor = "";
+        for(int i = 0; i < binS1.length(); i++){
+            char b = binS1.charAt(i);
+            char b2 = binS2.charAt(i);
+            if(b!=b2){
+                xor = xor + "1";
+            }
+            else if(b==b2){
+                xor = xor + "0";
+            }
+        }
+        return xor;
     }
 
 
