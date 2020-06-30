@@ -9,7 +9,6 @@ public class Processor {
     HashMap<String, Integer> registers; // Init
     HashMap<String, Integer> labelAddress; // Init
     String[] commandMemory = new String[1000]; // MC
-    
     Integer[] memory = new Integer[1000]; // MC
     String pc; // Sim
     String commandLine; // Sim
@@ -140,7 +139,13 @@ public class Processor {
                     case "and": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = registers.get(reg3);
+                        
                         updateSummary();
                         break;
 
@@ -186,6 +191,7 @@ public class Processor {
                 }
             }
         }
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
         System.out.println("-=-=-=-=-=-=-=-End-=-=-=-=-=-=-=-");
         System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     }
