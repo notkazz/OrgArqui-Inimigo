@@ -1,5 +1,11 @@
 .text
 .globl main
 main:
-addiu $t2, $t1, 5
+addiu $t2, $t1, 387
 addu $t3, $t2, $t7
+sw $t3, 4($t1)
+lw $t4, 4($t1)
+lui $t5, 943
+xor $t6, $t5, $t3
+and $t7, $t5, $t3
+andi $t8, $t5, 183
