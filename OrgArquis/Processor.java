@@ -111,7 +111,7 @@ public class Processor {
                     case "beq": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        
                         updateSummary();
                         break;
 
@@ -175,7 +175,6 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = rVal1>>rVal2;
                         registers.put(reg1, aux);
-
                         updateSummary();
                         break;
 
@@ -190,7 +189,6 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = rVal2<<rVal1;
                         registers.put(reg1, aux);
-
                         updateSummary();
                         break;
 
