@@ -129,7 +129,7 @@ public class Processor {
                         reg3 = param[2];
                         rVal1 = registers.get(reg1);
                         rVal2 = registers.get(reg2);
-                        if(rVal1==rVal2){
+                        if(rVal1!=rVal2){
 
                             //desvia pra reg1
                         }
