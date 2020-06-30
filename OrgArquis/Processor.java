@@ -81,14 +81,24 @@ public class Processor {
                     case "lw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-                        
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1].substring(0, 1);
+                        reg3 = param[1].substring(2, param[1].length()-1);
+                        aux = (Integer.parseInt(reg2)/4);
+                        registers.put(reg1, memory[aux]);
                         updateSummary();
                         break;
 
                     case "sw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1].substring(0, 1);
+                        reg3 = param[1].substring(2, param[1].length()-1);
+                        aux = (Integer.parseInt(reg2)/4) + registers.get(reg3);
+                        memory[aux] = registers.get(reg1);
                         updateSummary();
                         break;
 
