@@ -288,7 +288,8 @@ public class Processor {
                 binS1 = "0" + binS1;
             }
             tam = binS2.length();
-        } else { tam = binS1.length();}
+        } 
+        else { tam = binS1.length();}
         for(int i = 0; i < tam; i++){
             char b = binS1.charAt(i);
             char b2 = binS2.charAt(i);
@@ -319,14 +320,15 @@ public class Processor {
                 binS1 = "0" + binS1;
             }
             tam = binS2.length();
-        } else { tam = binS1.length();}
+        } 
+        else { tam = binS1.length();}
         for(int i = 0; i < tam; i++){
             char b = binS1.charAt(i);
             char b2 = binS2.charAt(i);
-            if(b==0 && b2 == 0){
+            if(b== '0' && b2 == '0'){
                 ori = ori + "0";
             }
-            else{
+            else if(b == '1' || b2 == '1'){
                 ori = ori + "1";
             }
         }
