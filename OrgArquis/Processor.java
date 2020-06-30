@@ -145,14 +145,22 @@ public class Processor {
                         reg3 = param[2];
                         rVal1 = registers.get(reg2);
                         rVal2 = registers.get(reg3);
-                        
+                        aux = binToIntI(intBinAnd(rVal1, rVal2));
+                        registers.put(reg1, aux);
                         updateSummary();
                         break;
 
                     case "andi": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
-
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = binToIntI(intBinAnd(rVal1, rVal2));
+                        registers.put(reg1, aux);
                         updateSummary();
                         break;
 
@@ -264,17 +272,20 @@ public class Processor {
         String binS1 = intToBinS(bin1);
         String binS2 = intToBinS(bin2);
         String and = "";
-        if(binS1.length()>binS2.length()){
-
+        while(binS1.length()<32){
+            binS1 = "0"+binS1;
         }
-        for(int i = 0; i < binS2.length(); i++){
-            char b = binS1.charAt(i);
+        while(binS2.length()<32){
+            binS2 = "0"+binS2;
+        }
+        for(int i = 0; i < binS1.length(); i++){
+            char b1 = binS1.charAt(i);
             char b2 = binS2.charAt(i);
-            if(b!=b2){
-                and = and + "1";
+            if(b1=='1' && b2=='1'){
+               and = and + "1";
             }
-            else if(b==b2){
-                and = and + "0";
+            else {
+               and = and + "0";  
             }
         }
         return and;
