@@ -8,18 +8,21 @@ public class Processor {
     // Class atributes
     HashMap<String, Integer> registers; // Init
     HashMap<String, Integer> labelAddress; // Init
-    String[] commandMemory = new String[1000]; // MC
-    Integer[] memory = new Integer[1000]; // MC
+    HashMap<String, Integer> dataAddress; //Init
+    String[] commandMemory = new String[200]; // MC
+    String[] dataMemory = new String[200]; 
+    Integer[] memory = new Integer[200]; // MC
     String pc; // Sim
     String commandLine; // Sim
-
-
+    int commandCount = 0;
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     public Processor(File file) throws IOException {
         initMemory(file);
         File summary = new File("summary.txt");
         summary.delete();
     }
+
+
 
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -31,13 +34,13 @@ public class Processor {
         Scanner interactable = new Scanner(System.in);
         for (int i = 0; i < commandMemory.length; i++) {
             if (commandMemory[i] != null) {
-                if(commandMemory[i].equals("")){break;}
                 String[] command = commandMemory[i].split(" ", 2);
                 switch (command[0]) {
                     case "xor": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -54,7 +57,8 @@ public class Processor {
                     case "lui": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -67,7 +71,8 @@ public class Processor {
                     case "addu": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -84,7 +89,8 @@ public class Processor {
                     case "addiu": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -101,13 +107,23 @@ public class Processor {
                     case "lw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
-                        param = command[1].split(", ");
-                        reg1 = param[0];
-                        reg2 = param[1].substring(0, 1);
-                        reg3 = param[1].substring(2, param[1].length()-1);
-                        aux = (Integer.parseInt(reg2)/4);
-                        registers.put(reg1, memory[aux]);
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
+                        if(commandLine.contains("(")){
+                            param = command[1].split(", ");
+                            reg1 = param[0];
+                            reg2 = param[1].substring(0, 1);
+                            reg3 = param[1].substring(2, param[1].length()-1);
+                            aux = (Integer.parseInt(reg2)/4);
+                            registers.put(reg1, memory[aux]);
+                        }
+                        else {
+                            param = command[1].split(", ");
+                            reg1 = param[0];
+                            reg2 = param[1];
+                            aux = dataAddress.get(reg2);
+                            memory[aux] = registers.get(reg1);
+                        }
                         updateSummaryLog();
                         newLine();
                         updateInterface();
@@ -116,13 +132,23 @@ public class Processor {
                     case "sw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
-                        param = command[1].split(", ");
-                        reg1 = param[0];
-                        reg2 = param[1].substring(0, 1);
-                        reg3 = param[1].substring(2, param[1].length()-1);
-                        aux = (Integer.parseInt(reg2)/4) + registers.get(reg3);
-                        memory[aux] = registers.get(reg1);
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
+                        if(commandLine.contains("(")){
+                            param = command[1].split(", ");
+                            reg1 = param[0];
+                            reg2 = param[1].substring(0, 1);
+                            reg3 = param[1].substring(2, param[1].length()-1);
+                            aux = (Integer.parseInt(reg2)/4) + registers.get(reg3);
+                            memory[aux] = registers.get(reg1);
+                        }
+                        else {
+                            param = command[1].split(", ");
+                            reg1 = param[0];
+                            reg2 = param[1];
+                            aux = dataAddress.get(reg2);
+                            memory[aux] = registers.get(reg1);
+                        }
                         updateSummaryLog();
                         newLine();
                         updateInterface();
@@ -131,7 +157,8 @@ public class Processor {
                     case "beq": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -150,7 +177,8 @@ public class Processor {
                     case "bne": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -169,7 +197,8 @@ public class Processor {
                     case "slt": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -186,7 +215,8 @@ public class Processor {
                     case "ori": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -203,7 +233,8 @@ public class Processor {
                     case "and": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();   
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -220,7 +251,8 @@ public class Processor {
                     case "andi": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -237,7 +269,8 @@ public class Processor {
                     case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();    
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -254,7 +287,8 @@ public class Processor {
                     case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         str = interactable.nextLine();    
                         commandLine = commandMemory[i];    
-                        pc = commandMemory[i+1];
+                        pcPos = i+1;
+                        pc = commandMemory[pcPos];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
@@ -276,11 +310,19 @@ public class Processor {
         System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-");
         System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-End-=-=-=-=-=-=-=--=-=-=-=-=-=-");
         System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-");
+        interactable.close();
+        /*System.out.println(commandCount);
+        for(String s: commandMemory){
+            if(s!=null) System.out.println(s);
+        }
+        */
     }
 
 
+
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    // Converters - Conv
+    // Converters - Conv 
     public String intToBinS(int val) {
         String bin = Integer.toBinaryString(val);
         return bin;
@@ -297,6 +339,28 @@ public class Processor {
         }
         return hexStr;
     }
+    public String hexSumAddress(int displc){
+        Integer hex1 = Integer.parseInt("400000", 16);
+        Integer hex2 = displc*(Integer.parseInt("4",16));
+        hex1 = hex1 + hex2;
+        String hexStr = Integer.toHexString(hex1);
+        while(hexStr.length()<8){
+            hexStr = "0"+hexStr;
+        }
+        return hexStr;
+    }
+    public String hexSumAddressPC(int displc){
+        Integer hex1 = Integer.parseInt("0", 16);
+        Integer hex2 = displc*(Integer.parseInt("4",16));
+        hex1 = hex1 + hex2;
+        String hexStr = Integer.toHexString(hex1);
+        while(hexStr.length()<8){
+            hexStr = "0"+hexStr;
+        }
+        return hexStr;
+    }
+
+
 
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -407,6 +471,8 @@ public class Processor {
     }
 
 
+
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Memory Control - MC
     public void saveInMemory(int address, int value) {
@@ -420,19 +486,21 @@ public class Processor {
     }
 
 
+
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    // Summary Controll - SM
-    public void updateSummaryLog() {
+    // Interface & Log Controll - I&L
+    public void updateSummaryLog(){
         try (FileWriter writer = new FileWriter("summaryLog.txt", true)){
             writer.write("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-            writer.write("-=-Instruction|" + commandLine + "|\n");
+            writer.write("-=-Instruction|" + commandLine +"| "+hexSumAddressPC(pcPos)+"\n");
             writer.write("-=-=-=-=-=-=PC|" + pc + "|\n");
             for(String reg : registers.keySet()){
                 writer.write(" Reg|"+reg+" => 0x"+binaryToHex8(intToBinS(registers.get(reg)))+"\n");
             }
             for(int h=0; h<memory.length; h++){
                 if(memory[h]!=null){
-                    writer.write(" Mem|"+h+" => "+memory[h]);
+                    writer.write(" Mem|"+hexSumAddress(h)+" => "+memory[h]);
                 }
             }
             writer.close();
@@ -444,20 +512,23 @@ public class Processor {
     public void updateInterface() {
         newLine();
         System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-        System.out.println("-=-Instruction|" + commandLine + "|");
-        System.out.println("-=-=-=-=-=-=PC|" + pc + "|");
+        System.out.println("-=-Instruction|" + commandLine +"|");
+        System.out.println("-=-=-=-=-=-=PC|" + pc + "| PCVal: 0x"+hexSumAddressPC(pcPos-1));
         for(String reg : registers.keySet()){
             System.out.println(" Reg|"+reg+" => 0x"+binaryToHex8(intToBinS(registers.get(reg))));
         }
         for(int h=0; h<memory.length; h++){
             if(memory[h]!=null){
-                System.out.println(" Mem|"+h+" => "+memory[h]);
+                System.out.println(" Mem|0x"+hexSumAddress(h)+" => "+memory[h]);
             }
         }
-    } 
+    }
+    int pcPos;
     public static void newLine() {  
         System.out.println(""); 
     }
+
+
 
 
     //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -466,6 +537,7 @@ public class Processor {
         initCommandMemory(file);
         initLabelsAddress();
         initRegisters();
+        initData(file);
     }
     public void initCommandMemory(File file){
         try(BufferedReader buffReader = new BufferedReader(new FileReader(file))){     
@@ -474,9 +546,15 @@ public class Processor {
             Pattern pat = Pattern.compile("\\.");
             while((line = buffReader.readLine()) != null){
                 Matcher mat = pat.matcher(line);
+                if(line.contains(".data:")){
+                    break;
+                }
                 if(!mat.find()){
                     commandMemory[memoryPos] = line;
                     memoryPos++;
+                    if(!line.equals("")){
+                        commandCount++;
+                    }
                 }
             }
         }
@@ -496,6 +574,31 @@ public class Processor {
                     labelAddress.put(mat.group(1), i);
                 }
             }    
+        }
+    }
+    public void initData(File file){
+        try(BufferedReader buffReader = new BufferedReader(new FileReader(file))){
+            dataAddress = new HashMap<String, Integer>();
+            String line;
+            int count = 0;
+            int displc = commandCount - labelAddress.size();
+            Boolean permission = false;
+            while((line = buffReader.readLine()) != null){
+                if(permission){
+                    count++;
+                    String[] dataArray = line.split(" ");
+                    memory[displc+count] = Integer.parseInt(dataArray[2]);
+                    String label = dataArray[0].substring(0,dataArray[0].length()-1);
+                    int pos = displc+count;
+                    dataAddress.put(label, pos); 
+                }
+                if(line.contains(".data:")){
+                    permission = true;
+                }
+            }
+        }
+        catch(IOException except){
+            System.out.println("MORREU não?!Indeed");;
         }
     }
     public void initRegisters(){
