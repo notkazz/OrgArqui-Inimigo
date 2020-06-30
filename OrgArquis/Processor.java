@@ -493,8 +493,8 @@ public class Processor {
     public void updateSummaryLog(){
         try (FileWriter writer = new FileWriter("summaryLog.txt", true)){
             writer.write("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-            writer.write("-=-Instruction|" + commandLine +"| "+hexSumAddressPC(pcPos)+"\n");
-            writer.write("-=-=-=-=-=-=PC|" + pc + "|\n");
+            writer.write("-=-Instruction|" + commandLine +"|\n");
+            writer.write("-=-=-=-=-=-=PC|" + pc + "| PCVal: 0x"+hexSumAddressPC(pcPos-1)+"\n");
             for(String reg : registers.keySet()){
                 writer.write(" Reg|"+reg+" => 0x"+binaryToHex8(intToBinS(registers.get(reg)))+"\n");
             }
