@@ -28,11 +28,14 @@ public class Processor {
         String reg1, reg2, reg3, address, str;
         Integer rVal1, rVal2, aux;
         String[] param;
+        Scanner interactable = new Scanner(System.in);
         for (int i = 0; i < commandMemory.length; i++) {
             if (commandMemory[i] != null) {
+                if(commandMemory[i].equals("")){break;}
                 String[] command = commandMemory[i].split(" ", 2);
                 switch (command[0]) {
                     case "xor": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -43,20 +46,26 @@ public class Processor {
                         rVal2 = registers.get(reg3);
                         aux = binToIntI(intBinXor(rVal1, rVal2));
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "lui": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
                         reg1 = param[0];
                         reg2 = param[1];
                         registers.put(reg1, Integer.parseInt(reg2));
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "addu": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -67,10 +76,13 @@ public class Processor {
                         rVal2 = registers.get(reg3);
                         aux = binToIntI(intBinAdd(rVal1, rVal2));
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "addiu": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -81,10 +93,13 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = rVal1 + rVal2;
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "lw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -93,10 +108,13 @@ public class Processor {
                         reg3 = param[1].substring(2, param[1].length()-1);
                         aux = (Integer.parseInt(reg2)/4);
                         registers.put(reg1, memory[aux]);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "sw": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -105,10 +123,13 @@ public class Processor {
                         reg3 = param[1].substring(2, param[1].length()-1);
                         aux = (Integer.parseInt(reg2)/4) + registers.get(reg3);
                         memory[aux] = registers.get(reg1);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "beq": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -121,11 +142,13 @@ public class Processor {
                             aux = labelAddress.get(reg3);
                             i = aux;
                         }
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "bne": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-                        //BnQ $s0, $s1, L2              #desvia para L2 se $s0 != $s1
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -135,12 +158,16 @@ public class Processor {
                         rVal1 = registers.get(reg1);
                         rVal2 = registers.get(reg2);
                         if(rVal1!=rVal2){
-
+                            aux = labelAddress.get(reg3);
+                            i = aux;
                         }
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "slt": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -151,11 +178,13 @@ public class Processor {
                         rVal2 = registers.get(reg3);
                         aux = lessThan(rVal1,rVal2);
                         registers.put(reg1, aux);
-
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "ori": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -166,10 +195,13 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = binToIntI(intBinOri(rVal1, rVal2));
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "and": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();   
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -180,10 +212,13 @@ public class Processor {
                         rVal2 = registers.get(reg3);
                         aux = binToIntI(intBinAnd(rVal1, rVal2));
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "andi": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -194,10 +229,13 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = binToIntI(intBinAnd(rVal1, rVal2));
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();    
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -208,10 +246,13 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = rVal1>>rVal2;
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        str = interactable.nextLine();    
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
                         param = command[1].split(", ");
@@ -222,7 +263,9 @@ public class Processor {
                         rVal2 = Integer.parseInt(reg3);
                         aux = rVal2<<rVal1;
                         registers.put(reg1, aux);
-                        updateSummary();
+                        updateSummaryLog();
+                        newLine();
+                        updateInterface();
                         break;
 
                     default:
@@ -230,9 +273,9 @@ public class Processor {
                 }
             }
         }
-        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-        System.out.println("-=-=-=-=-=-=-=-End-=-=-=-=-=-=-=-");
-        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+        System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-");
+        System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-End-=-=-=-=-=-=-=--=-=-=-=-=-=-");
+        System.out.println("-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-");
     }
 
 
@@ -379,8 +422,8 @@ public class Processor {
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Summary Controll - SM
-    public void updateSummary() {
-        try (FileWriter writer = new FileWriter("summary.txt", true)){
+    public void updateSummaryLog() {
+        try (FileWriter writer = new FileWriter("summaryLog.txt", true)){
             writer.write("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
             writer.write("-=-Instruction|" + commandLine + "|\n");
             writer.write("-=-=-=-=-=-=PC|" + pc + "|\n");
@@ -397,6 +440,23 @@ public class Processor {
         catch(IOException e){
             System.out.println("Morreu");
         }    
+    }
+    public void updateInterface() {
+        newLine();
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+        System.out.println("-=-Instruction|" + commandLine + "|");
+        System.out.println("-=-=-=-=-=-=PC|" + pc + "|");
+        for(String reg : registers.keySet()){
+            System.out.println(" Reg|"+reg+" => 0x"+binaryToHex8(intToBinS(registers.get(reg))));
+        }
+        for(int h=0; h<memory.length; h++){
+            if(memory[h]!=null){
+                System.out.println(" Mem|"+h+" => "+memory[h]);
+            }
+        }
+    } 
+    public static void newLine() {  
+        System.out.println(""); 
     }
 
 
