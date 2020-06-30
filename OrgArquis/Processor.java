@@ -9,6 +9,7 @@ public class Processor {
     HashMap<String, Integer> registers; // Init
     HashMap<String, Integer> labelAddress; // Init
     String[] commandMemory = new String[1000]; // MC
+    
     Integer[] memory = new Integer[1000]; // MC
     String pc; // Sim
     String commandLine; // Sim
@@ -150,16 +151,32 @@ public class Processor {
                         updateSummary();
                         break;
 
-                    case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                    case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = rVal1>>rVal2;
+                        registers.put(reg1, aux);
 
                         updateSummary();
                         break;
 
-                    case "srl": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                    case "sll": //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                         commandLine = commandMemory[i];    
                         pc = commandMemory[i+1];
+                        param = command[1].split(", ");
+                        reg1 = param[0];
+                        reg2 = param[1];
+                        reg3 = param[2];
+                        rVal1 = registers.get(reg2);
+                        rVal2 = Integer.parseInt(reg3);
+                        aux = rVal2<<rVal1;
+                        registers.put(reg1, aux);
 
                         updateSummary();
                         break;
@@ -169,9 +186,8 @@ public class Processor {
                 }
             }
         }
-        System.out.println("  -=-=-=-=  -=-=-=-=-  =-=-=-=-  ");
         System.out.println("-=-=-=-=-=-=-=-End-=-=-=-=-=-=-=-");
-        System.out.println("  -=-=-=-=  -=-=-=-=-  =-=-=-=-  ");
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     }
 
 
@@ -250,7 +266,7 @@ public class Processor {
             }
             for(int h=0; h<memory.length; h++){
                 if(memory[h]!=null){
-                    writer.write(" Mem|"+h+" => "+memory[h]+"\n");
+                    writer.write(" Mem|"+h+" => "+memory[h]);
                 }
             }
             writer.close();
