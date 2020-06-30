@@ -313,8 +313,8 @@ public class Processor {
             tam = binS1.length();
         }
         else if(binS2.length() > binS1.length()){
-            int dif = binS1.length() - binS2.length();
-            for(int i = 0; i<dif;i++){
+            int dif = binS2.length() - binS1.length();
+            for(int i = 0; i<dif; i++){
                 binS1 = "0" + binS1;
             }
             tam = binS2.length();
